@@ -5,7 +5,7 @@ using UnityEngine;
 public class Controller : MonoBehaviour
 {
     private float speed = 5f;
-    private float jumpForce = 5f;
+    private float jumpForce = 8f;
 
     private Vector3 movimiento;
     private Rigidbody RB;
@@ -20,6 +20,7 @@ public class Controller : MonoBehaviour
     public int puntaje = 0;
     private Vector3 posicionInicial;
 
+    
 
     void Start()
     {
@@ -35,16 +36,22 @@ public class Controller : MonoBehaviour
         Jump = Physics.Raycast(transform.position, Vector3.down, rayDistance, layer);
 
         Debug.DrawRay(transform.position, Vector3.down * rayDistance, rayColor);
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            RB.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        }
     }
 
     private void FixedUpdate()
     {
         RB.velocity = Vector3.Scale(movimiento,new Vector3(speed,1,speed));
-        if(Input.GetKeyDown(KeyCode.Space))
-        {
-            RB.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-        }
+        
+
     }
+
+
+    //Colisiones
 
     private void OnTriggerEnter(Collider other)
     {
@@ -57,16 +64,23 @@ public class Controller : MonoBehaviour
             SumarPuntos(10);
             Destroy(other.gameObject);
         }
-        else if (other.gameObject.tag == "Enemigo")
-        {
-            PerderVida(25);
-        }
+        
         else if (other.CompareTag("Corazon"))
         {
             SumarVida(50);
             Destroy(other.gameObject);
         }
     }
+
+    private void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.tag == "Enemigo")
+        {
+            PerderVida(25);
+        }
+    }
+
+
 
     private void PerderVida(int cantidad)
     {
