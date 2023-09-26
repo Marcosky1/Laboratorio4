@@ -20,7 +20,10 @@ public class Controller : MonoBehaviour
     public int puntaje = 0;
     private Vector3 posicionInicial;
 
-    
+    public delegate void VidaPerdidaHandler(int cantidad);
+    public event VidaPerdidaHandler OnVidaPerdida;
+
+
 
     void Start()
     {
@@ -76,7 +79,7 @@ public class Controller : MonoBehaviour
     {
         if (other.gameObject.tag == "Enemigo")
         {
-            PerderVida(25);
+            PerderVida(20);
         }
     }
 
@@ -89,6 +92,11 @@ public class Controller : MonoBehaviour
         {
             vida = 100; // Restaura la vida a 100
             transform.position = posicionInicial; // Vuelve a la posición inicial
+        }
+
+        if (OnVidaPerdida != null)
+        {
+            OnVidaPerdida(cantidad);
         }
     }
 

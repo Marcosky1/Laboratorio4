@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 
 public class SeguimientoCamara : MonoBehaviour
 {
     public Transform jugador;
     public Vector3 posicionInicial = new Vector3(-3.09f, 1f, -10.56f);
+    public CinemachineImpulseSource impulseSource; 
+    public float intensidadVibracion = 1.0f; 
 
     void Start()
     {
@@ -17,11 +20,8 @@ public class SeguimientoCamara : MonoBehaviour
     {
         if (jugador != null)
         {
-            // Obtener la posición actual de la cámara
             Vector3 nuevaPosicion = transform.position;
-            // Actualizar solo la coordenada X con la posición del jugador
             nuevaPosicion.x = jugador.position.x;
-            // Establecer la nueva posición de la cámara
             transform.position = nuevaPosicion;
         }
     }
@@ -32,9 +32,17 @@ public class SeguimientoCamara : MonoBehaviour
         {
             // Cambia la proyección de la cámara a perspectiva 3D
             Camera.main.orthographic = false;
-
             Camera.main.fieldOfView = 10f;
         }
     }
+
+    public void HacerCamaraTiemblar()
+    {
+        if (impulseSource != null)
+        {
+            impulseSource.GenerateImpulse();
+        }
+    }
 }
+
 
